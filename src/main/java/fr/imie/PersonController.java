@@ -1,30 +1,46 @@
 package fr.imie;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-public class PersonController {
+public class PersonController
+{
 
-	@Autowired
-	private PersonRepository repository;
+	ArrayList<Person> personList = new ArrayList<>();
 
 	@RequestMapping("person")
-	public String hello(Person person, Model m) {
+	public String person(Person person, Model m)
+	{
+		if (person.getPrenom() != "" &&
+				person.getPrenom() != null &&
+				person.getNom() != "" &&
+				person.getNom() != null &&
+				person.getEmail() != "" &&
+				person.getEmail() != null )
 
-		repository.save(new Person("anakin", "skywalker", "anakin@lepuceau.com"));
-		repository.save(new Person("luke", "skywalker", "luke@lemancho.world"));
-		repository.save(new Person("leia", "organa", "lafillefacile@pecho.com"));
+		{
+			personList.add(person);
+		}
 
-		List<Person> persons = repository.findAll();
-
-		m.addAttribute("person", persons);
+		m.addAttribute("personList", personList);
 		return "person";
 	}
 
-}
+	@RequestMapping("update")
+	public String update(Person person, Model m)
+	{
+		m.addAttribute("personList", personList);
+		System.out.println("UPDATE");
+		return "redirect:person";
+	}
+
+	@RequestMapping("delete")
+	public String delete(Person person, Model m)
+	{
+		m.addAttribute("personList", personList);
+		System.out.println("DELETE");
+		return "redirect:person";
+	}
+
+} 
